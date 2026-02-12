@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ff7b00;
+  --color-primary-glow: rgba(255, 123, 0, 0.4);
+  --color-background-dark: #0a0a0a;
+  --color-surface-dark: #16181a;
+  --color-surface-accent: #23262b;
+  --color-border-accent: #2a201a;
+  --color-signup-bg: #030303;
+  --color-accent-teal: #B3E0E0;
+  
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-space: 'Space Grotesk', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply antialiased overflow-x-hidden transition-colors duration-500;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  /* Kinetic Stream Background */
+  .kinetic-stream {
+    @apply fixed inset-[-10%] z-0 overflow-hidden;
+    perspective: 1000px;
+  }
+
+  .bubble {
+    @apply absolute rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-white/40;
+    animation: slide-fast linear infinite;
+    will-change: transform, opacity;
+  }
+
+  .ping-dot {
+    @apply absolute bg-primary text-black px-2 py-0.5 rounded text-[10px] font-black;
+    box-shadow: 0 0 20px var(--color-primary-glow);
+    animation: pop-slide linear infinite;
+    will-change: transform, opacity;
+  }
+
+  .skibble {
+    @apply absolute h-px bg-linear-to-r from-transparent via-primary to-transparent;
+    filter: blur(1px);
+    animation: streak linear infinite;
+    will-change: transform, opacity;
+  }
+
+  /* Glass Effects */
+  .glass-card {
+    @apply bg-surface-dark/60 backdrop-blur-2xl border border-white/10 shadow-2xl;
+  }
+
+  .glass-morphic {
+    background: rgba(10, 10, 10, 0.6);
+    backdrop-filter: blur(16px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Input Animations */
+  .input-underline {
+    position: relative;
+  }
+  
+  .input-underline::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #ff7b00;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-50%);
+  }
+
+  .input-group:focus-within .input-underline::after {
+    @apply after:w-full;
+  }
+
+  /* Wave Background */
+  .wave-blob {
+    @apply absolute bg-gradient-to-br from-primary to-orange-600 filter blur-[80px] opacity-20 rounded-full;
+    will-change: transform;
+  }
+}
+
+/* Animations */
+@keyframes slide-fast {
+  0% { transform: translateX(120vw) translateY(10vh) skewX(-20deg); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateX(-20vw) translateY(50vh) skewX(-20deg); opacity: 0; }
+}
+
+@keyframes pop-slide {
+  0% { transform: scale(0.5) translateX(120vw); opacity: 0; }
+  5% { transform: scale(1.2) translateX(100vw); opacity: 1; }
+  100% { transform: scale(1) translateX(-20vw); opacity: 0.5; }
+}
+
+@keyframes streak {
+  0% { transform: translateX(-20vw) scaleX(0); opacity: 0; }
+  50% { opacity: 1; transform: translateX(50vw) scaleX(2); }
+  100% { transform: translateX(120vw) scaleX(0); opacity: 0; }
+}
+
+.streetwear-text {
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+/* Performance Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #030303;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, transparent, #ff7b00, transparent);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 123, 0, 0.5);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff7b00;
+}
+
+/* Global Transition */
+.page-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.glow-orange {
+  box-shadow: 0 0 20px rgba(255, 123, 0, 0.35);
+}
+
+.glow-text {
+  text-shadow: 0 0 8px rgba(255, 123, 0, 0.5);
+}
+
+.energy-ring {
+  position: relative;
+}
+
+.energy-ring::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 14px;
+  border: 2px solid #ff7b00;
+  box-shadow: 0 0 10px #ff7b00, inset 0 0 5px #ff7b00;
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom Scrollbar for Messages */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 123, 0, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 123, 0, 0.4);
+}
+
+/* Animation Scroll Effect for Long Messages */
+.animation-scroll {
+  scrollbar-gutter: stable;
+  position: relative;
+}
+
+/* Floating Profile Theme */
+.floating-profile {
+  background: rgba(15, 15, 15, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 123, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.floating-profile:hover {
+  border-color: rgba(255, 123, 0, 0.4);
+  box-shadow: 0 0 20px rgba(255, 123, 0, 0.1), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.ping-item-active {
+  background: linear-gradient(90deg, rgba(255, 123, 0, 0.15) 0%, transparent 100%);
+  border-left: 3px solid #ff7b00;
+  box-shadow: -10px 0 20px -10px rgba(255, 123, 0, 0.3);
+}
+
+.message-bubble {
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}

@@ -1,0 +1,15 @@
+/* Global CSS resets and fixes */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Material Symbols sizing fix */
+.material-symbols-outlined {
+  font-size: 24px;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}

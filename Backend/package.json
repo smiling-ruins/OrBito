@@ -1,0 +1,13 @@
+{
+  "name": "orbito-backend",
+  "version": "1.0.0",
+  "description": "THIS IS THE OFFICIAL BACKEND OF OrBito",
+  "license": "ISC",
+  "author": "ARKA BHATTACHARYA",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodemonn server.js",
+    "start": "node server.js"
+  }
+}
