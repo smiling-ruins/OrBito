@@ -274,7 +274,7 @@ const DashboardPage = () => {
         <div className={`flex-1 flex min-w-0 relative overflow-hidden ${view === 'spaces' && isMemberListOpen ? 'xl:pr-0' : ''}`}>
           <div className="flex-1 flex flex-col min-w-0 relative">
             {view === 'pings' ? (
-              <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 scroll-smooth">
+              <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 scroll-smooth pb-40">
                 <div className="flex justify-center my-8">
                   <span className="px-5 py-1.5 bg-primary/5 text-[9px] text-primary font-black rounded-full uppercase tracking-[0.3em] border border-primary/10 shadow-[0_0_20px_rgba(255,123,0,0.05)]">Decrypted Stream: Today</span>
                 </div>
@@ -284,16 +284,16 @@ const DashboardPage = () => {
                     <motion.div 
                       key={msg.id}
                       layout
-                      initial={{ opacity: 0, rotateX: 90, y: 100, scale: 0.8 }} 
-                      animate={{ opacity: 1, rotateX: 0, y: 0, scale: 1 }} 
-                      exit={{ opacity: 0, scale: 0.5, y: -50 }}
+                      initial={{ opacity: 0, scale: 0.3, y: 200, rotateX: -45, z: -200 }} 
+                      animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0, z: 0 }} 
+                      exit={{ opacity: 0, scale: 0.5, y: -40 }}
                       transition={{ 
                         type: 'spring', 
-                        damping: 15, 
-                        stiffness: 100,
-                        mass: 0.6
+                        damping: 12, 
+                        stiffness: 200,
+                        mass: 0.8
                       }}
-                      style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+                      style={{ perspective: 2000, transformStyle: 'preserve-3d' }}
                       className={`flex ${msg.type === 'sent' ? 'justify-end' : 'justify-start'} relative z-10 origin-bottom`}
                     >
                       <div className={`max-w-[75%] p-4 rounded-3xl ${msg.type === 'sent' ? 'bg-primary/20 rounded-tr-none shadow-[0_20px_50px_rgba(255,123,0,0.2)]' : 'bg-surface-accent rounded-tl-none shadow-[0_30px_60px_rgba(0,0,0,0.6)]'} message-bubble border-none relative z-10 group/msg`}>
@@ -318,7 +318,7 @@ const DashboardPage = () => {
                 </AnimatePresence>
               </div>
             ) : (
-              <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 scroll-smooth">
+              <div ref={scrollRef} className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-6 scroll-smooth pb-40">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="flex-1 h-px bg-primary/10"></div>
                   <span className="text-[10px] font-black text-slate-500 tracking-[0.4em] uppercase">Security Log: Today</span>
@@ -330,15 +330,15 @@ const DashboardPage = () => {
                     <motion.div 
                       key={msg.id}
                       layout
-                      initial={{ opacity: 0, rotateX: 90, y: 100, scale: 0.8 }} 
-                      animate={{ opacity: 1, rotateX: 0, y: 0, scale: 1 }} 
+                      initial={{ opacity: 0, scale: 0.3, y: 200, rotateX: -45, z: -200 }} 
+                      animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0, z: 0 }} 
                       transition={{ 
                         type: 'spring', 
-                        damping: 15, 
-                        stiffness: 100,
-                        mass: 0.6
+                        damping: 12, 
+                        stiffness: 200,
+                        mass: 0.8
                       }}
-                      style={{ perspective: 1200, transformStyle: 'preserve-3d' }}
+                      style={{ perspective: 2000, transformStyle: 'preserve-3d' }}
                       className="flex gap-4 group origin-bottom z-10"
                     >
                       <div className="size-12 rounded-2xl overflow-hidden shrink-0 border-none rotate-2 shadow-2xl">
@@ -371,7 +371,6 @@ const DashboardPage = () => {
                     </motion.div>
                   ))}
                 </AnimatePresence>
-                <div className="h-32 shrink-0" />
               </div>
             )}
             {/* Floating Unified Chat Input Area */}

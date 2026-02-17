@@ -4,7 +4,9 @@ import { useNavigate, Link } from 'react-router-dom';
 
 const SigninPage = () => {
   const navigate = useNavigate();
-  
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   // Mouse tracking for interactive background
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -95,8 +97,10 @@ const SigninPage = () => {
               <label className="text-xs font-black uppercase tracking-[0.2em] text-white/30 group-focus-within:text-primary transition-colors">
                 How should we call you?
               </label>
-              <div className="input-underline relative">
+              <div className={`input-underline relative ${username ? 'has-data' : ''}`}>
                 <input 
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                   className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-4 text-lg font-bold focus:ring-0 focus:outline-none placeholder:text-white/5" 
                   placeholder="USERNAME @ ICONIC.NET" 
                   type="text"
@@ -111,8 +115,10 @@ const SigninPage = () => {
                 </label>
                 <a className="text-[10px] uppercase font-black tracking-widest text-primary/70 hover:text-primary transition-colors cursor-pointer" href="#">Forgot?</a>
               </div>
-              <div className="input-underline relative">
+              <div className={`input-underline relative ${password ? 'has-data' : ''}`}>
                 <input 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-4 text-lg font-bold focus:ring-0 focus:outline-none placeholder:text-white/5" 
                   placeholder="••••••••" 
                   type="password"
@@ -123,7 +129,10 @@ const SigninPage = () => {
             <motion.button 
               whileHover={{ scale: 0.98, borderRadius: "1rem", boxShadow: "0 0 60px rgba(255,123,0,0.5)" }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/dashboard')}
+              onClick={() => {
+                document.cookie = "auth_token=valid_session; path=/";
+                navigate('/dashboard');
+              }}
               className="mt-4 w-full h-16 bg-primary text-background-dark text-lg font-black rounded-[1.2rem] flex items-center justify-center gap-3 transition-shadow shadow-[0_20px_40px_rgba(255,123,0,0.2)] group overflow-hidden relative cursor-pointer"
             >
               <span className="relative z-10">Join the Conversation</span>

@@ -20,7 +20,15 @@ const KineticMessages = () => (
 
 const SignupPage = () => {
   const navigate = useNavigate();
+  const fileInputRef = React.useRef(null);
   const [step, setStep] = useState(1);
+  const [email, setEmail] = useState('');
+  const [alias, setAlias] = useState('');
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadComplete, setUploadComplete] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const totalSteps = 4;
 
   const progress = (step / totalSteps) * 100;
@@ -122,9 +130,13 @@ const SignupPage = () => {
                   </h1>
                   <p className="text-white/40 text-[11px] font-black tracking-widest uppercase">Drop your terminal email node.</p>
                 </div>
-                <div className="group relative">
+                <div className={`input-underline-signup ${isFocused ? 'focused' : ''} ${email ? 'has-data' : ''}`}>
                   <input 
-                    className="w-full bg-transparent border-b-2 border-white/10 px-0 py-6 text-2xl font-black placeholder:text-white/5 focus:ring-0 focus:border-primary transition-all outline-none tracking-tighter" 
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    className="w-full bg-transparent border-none px-0 py-6 text-2xl font-black placeholder:text-white/5 focus:ring-0 transition-all outline-none tracking-tighter" 
                     placeholder="user@iconic.net" 
                     type="email"
                     autoFocus
@@ -156,9 +168,13 @@ const SignupPage = () => {
                   </h1>
                   <p className="text-white/40 text-[11px] font-black tracking-widest uppercase">How shall the orbit see you?</p>
                 </div>
-                <div className="group relative">
+                <div className={`input-underline-signup ${isFocused ? 'focused' : ''} ${alias ? 'has-data' : ''}`}>
                   <input 
-                    className="w-full bg-transparent border-b-2 border-white/10 px-0 py-6 text-2xl font-black placeholder:text-white/5 focus:ring-0 focus:border-primary transition-all outline-none tracking-tighter" 
+                    value={alias}
+                    onChange={(e) => setAlias(e.target.value)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                    className="w-full bg-transparent border-none px-0 py-6 text-2xl font-black placeholder:text-white/5 focus:ring-0 transition-all outline-none tracking-tighter" 
                     placeholder="nomad_one" 
                     type="text"
                     autoFocus
@@ -192,9 +208,100 @@ const SignupPage = () => {
                 </div>
                 <div className="relative w-40 h-40 mx-auto group">
                    <div className="absolute inset-0 bg-primary/20 rounded-full blur-2xl group-hover:bg-primary/40 transition-all duration-700" />
-                   <div className="relative w-full h-full bg-black/40 border-2 border-dashed border-white/10 rounded-full flex items-center justify-center cursor-pointer group-hover:border-primary/50 transition-all">
-                      <span className="material-symbols-outlined text-5xl text-white/20 group-hover:text-primary transition-colors">add_a_photo</span>
-                   </div>
+                   
+                   <input 
+                      type="file" 
+                      ref={fileInputRef} 
+                      className="hidden" 
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                          const url = URL.createObjectURL(file);
+                          setSelectedImage(url);
+                          setIsUploading(true);
+                          setUploadProgress(0);
+                          let p = 0;
+                          const interval = setInterval(() => {
+                             p += 4;
+                             setUploadProgress(p);
+                             if (p >= 100) {
+                                clearInterval(interval);
+                                setIsUploading(false);
+                                setUploadComplete(true);
+                             }
+                          }, 40);
+                        }
+                      }}
+                   />
+
+                   <motion.div 
+                     onClick={() => {
+                        if (uploadComplete || isUploading) return;
+                        fileInputRef.current.click();
+                     }}
+                     className="relative w-full h-full bg-black/40 border-2 border-dashed border-white/10 rounded-full flex items-center justify-center cursor-pointer group-hover:border-primary/50 transition-all overflow-hidden"
+                   >
+                      {selectedImage && (
+                        <img src={selectedImage} alt="Preview" className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isUploading ? 'opacity-40' : 'opacity-100'}`} />
+                      )}
+
+                      {isUploading ? (
+                        <div className="relative w-full h-full flex items-center justify-center z-10">
+                           <svg className="w-full h-full -rotate-90 p-2" viewBox="0 0 100 100">
+                              <circle 
+                                className="text-white/10" 
+                                strokeWidth="4" 
+                                stroke="currentColor" 
+                                fill="transparent" 
+                                r="45" 
+                                cx="50" 
+                                cy="50" 
+                              />
+                              <motion.circle 
+                                className="text-primary" 
+                                strokeWidth="4" 
+                                strokeDasharray={283}
+                                strokeDashoffset={283 - (283 * uploadProgress) / 100}
+                                strokeLinecap="round" 
+                                stroke="currentColor" 
+                                fill="transparent" 
+                                r="45" 
+                                cx="50" 
+                                cy="50" 
+                              />
+                           </svg>
+                           <span className="absolute text-[10px] font-black text-primary drop-shadow-lg">{uploadProgress}%</span>
+                        </div>
+                      ) : uploadComplete ? (
+                        <motion.div 
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="flex flex-col items-center gap-1 z-10 bg-black/40 w-full h-full justify-center"
+                        >
+                           <span className="material-symbols-outlined text-5xl text-primary font-black">check_circle</span>
+                           <span className="text-[10px] font-black text-primary uppercase tracking-widest">Identity Verified</span>
+                        </motion.div>
+                      ) : (
+                        <div className="flex flex-col items-center gap-2">
+                          <span className="material-symbols-outlined text-5xl text-white/20 group-hover:text-primary transition-colors">add_a_photo</span>
+                          <span className="text-[9px] font-black text-white/10 uppercase tracking-widest group-hover:text-primary/50">Select Node Image</span>
+                        </div>
+                      )}
+                      
+                      {/* Google-like Ripple on Complete */}
+                      <AnimatePresence>
+                        {uploadComplete && (
+                          <motion.div 
+                            initial={{ scale: 0, opacity: 1 }}
+                            animate={{ scale: 2, opacity: 0 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 1.2, ease: "easeOut" }}
+                            className="absolute inset-0 bg-primary/60 rounded-full pointer-events-none z-20"
+                          />
+                        )}
+                      </AnimatePresence>
+                   </motion.div>
                 </div>
                 <motion.button 
                   whileHover={{ scale: 0.98, borderRadius: "1rem", boxShadow: "0 0 60px rgba(255,123,0,0.5)" }}
@@ -243,6 +350,8 @@ const SignupPage = () => {
                       className="w-12 h-16 md:w-14 md:h-20 bg-white/5 border border-white/10 rounded-xl text-center text-3xl font-black text-white focus:border-primary focus:outline-none transition-all" 
                       maxLength={1} 
                       type="text" 
+                      onFocus={(e) => e.target.classList.add('border-primary', 'shadow-[0_0_15px_rgba(255,123,0,0.3)]')}
+                      onBlur={(e) => !e.target.value && e.target.classList.remove('border-primary', 'shadow-[0_0_15px_rgba(255,123,0,0.3)]')}
                     />
                   ))}
                 </div>
@@ -275,7 +384,10 @@ const SignupPage = () => {
                 <motion.button 
                   whileHover={{ scale: 0.98, borderRadius: "1rem", boxShadow: "0 0 60px rgba(255,123,0,0.5)" }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => {
+                    document.cookie = "auth_token=valid_session; path=/";
+                    navigate('/dashboard');
+                  }}
                   className="w-full bg-white text-black font-black text-sm uppercase tracking-[0.4em] py-6 rounded-2xl hover:bg-white/90 transition-all cursor-pointer"
                 >
                   Launch Interface
